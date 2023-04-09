@@ -1,13 +1,16 @@
 package com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity;
 
 import java.time.LocalDateTime;
-
+import java.util.*;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -51,6 +54,24 @@ public class Course{
 	@UpdateTimestamp
 	private LocalDateTime lastUpdatedDate;
 	
+	// Course can have multiple reviews
+	@OneToMany(mappedBy="course", fetch=FetchType.LAZY)
+	private List<Review> reviews = new ArrayList<>();
+	
+	
+	
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void addReview(Review review) {
+		this.reviews.add(review);
+	}
+	
+	public void removeReview(Review review) {
+		this.reviews.remove(review);
+	}
+
 	@Override
 	public String toString() {
 		return "Course [Id=" + id + ", name=" + name + "]";

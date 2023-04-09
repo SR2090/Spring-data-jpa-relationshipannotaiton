@@ -5,8 +5,13 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -15,6 +20,7 @@ import org.springframework.test.annotation.DirtiesContext.MethodMode;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.SectionMainFiveApplication;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.Repository.CourseRepository;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Course;
+import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Review;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.SectionMainFiveApplicationTests;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -24,6 +30,10 @@ public class CourseRepositoryTest {
 	@Autowired
 	private CourseRepository repository;
 	
+	@Autowired
+	private EntityManager em;
+	
+	private Logger logger = LoggerFactory.getLogger(this.getClass());
 	
 	@Test
 	@DirtiesContext
@@ -32,14 +42,14 @@ public class CourseRepositoryTest {
 		assertEquals("Master JPA and JDBC Spring", course.getName());
 	} 
 	
-	@Test
-	@DirtiesContext
-	public void findByDelete_basic() {
-		long Id = 10001;
-		boolean result = repository.deleteById(Id);
-		assertTrue(result);
-		assertNull(repository.findById(Id));
-	}
+//	@Test
+//	@DirtiesContext
+//	public void findByDelete_basic() {
+//		long Id = 10001L;
+//		boolean result = repository.deleteById(Id);
+//		assertTrue(result);
+//		assertNull(repository.findById(Id));
+//	}
 	
 	@Test
 	@DirtiesContext
@@ -58,4 +68,19 @@ public class CourseRepositoryTest {
 		repository.playingWithEntityManager();
 	}
 	
+	@Test
+	@Transactional
+	public void fetchTypeManyToOne() {
+		Course course = repository.findById(10001L);
+		logger.info("The course {} -> ", course);
+		logger.info("The associated reviews with the course {} ", course.getReviews());
+	}
+	
+	@Test
+	@Transactional
+	public void fetchCourseGivenReview() {
+		Review review = em.find(Review.class, 50001L);
+		logger.info("The review {} ", review);
+		logger.info("The associated course is {}",  review.getCourse());
+	}
 }

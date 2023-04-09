@@ -1,6 +1,7 @@
 package com.in28minutesmasterhibernatewithjpa.sectionMainFive.Repository;
 
 import javax.persistence.EntityManager;
+
 import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Course;
+import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Review;
+
+import java.util.*;
 
 @Repository
 @Transactional
@@ -76,5 +80,33 @@ public class CourseRepository {
 		System.out.println(c3.getName());
 	}
 	
+	public void addReviewsToCourse() {
+		// Retrieve the course to add reviews
+		Course course = findById(10002);
+		// show the existing reviews
+		logger.info(course.getName() + " has the following reviews -> {}", course.getReviews());
+		
+		Review review1 = new Review("5", "Great Hands-off stuff");
+		Review review2 = new Review("3", "Accent is problem");
+		course.addReview(review1);
+		review1.setCourse(course);
+		
+		course.addReview(review2);
+		review2.setCourse(course);
+		
+		em.persist(review1);
+		em.persist(review2);
+	}
+	
+	public void addReviewsToCourse(Long courseId, List<Review> reviews) {
+		Course course = findById(courseId);
+		logger.info("Course with courseId is {}", course);
+		
+		for(Review review : reviews) {
+			course.addReview(review);
+			review.setCourse(course);
+			em.persist(review);
+		}
+	}
 	
 }
