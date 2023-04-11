@@ -21,6 +21,7 @@ import com.in28minutesmasterhibernatewithjpa.sectionMainFive.SectionMainFiveAppl
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.Repository.CourseRepository;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Course;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Review;
+import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Student;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.SectionMainFiveApplicationTests;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -82,5 +83,13 @@ public class CourseRepositoryTest {
 		Review review = em.find(Review.class, 50001L);
 		logger.info("The review {} ", review);
 		logger.info("The associated course is {}",  review.getCourse());
+	}
+	
+	@Test
+	@Transactional
+	public void retrieveStudentAndCourses() {
+		Student student = em.find(Student.class, 20001L);
+		logger.info("The student {}", student);
+		logger.info("The courses the student has taken {}", student.getCourses());
 	}
 }

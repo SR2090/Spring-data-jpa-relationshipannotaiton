@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Passport;
 import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Student;
+import com.in28minutesmasterhibernatewithjpa.sectionMainFive.entity.Course;
 
 @Repository
 @Transactional
@@ -63,4 +64,20 @@ public class StudentRepository {
 //		int a = 5 / 0;
 	}
 	
+	public void insertStudentAndCourses() {
+		Student student = new Student("BABI THE NEW STUDENT");
+		Course course1 = new Course("OS");
+		Course course2 = new Course("DBMS");
+		// save the individual entities
+		em.persist(student);
+		em.persist(course1);
+		em.persist(course2);
+		// set the relationships
+		student.addCourses(course2);
+		course1.addStudents(student);
+		course2.addStudents(student);
+		
+		// save the owning side(student) relationship
+		em.persist(student);
+	}
 }

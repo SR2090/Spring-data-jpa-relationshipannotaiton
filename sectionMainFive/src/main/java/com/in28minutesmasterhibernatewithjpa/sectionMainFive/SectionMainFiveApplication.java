@@ -28,11 +28,7 @@ public class SectionMainFiveApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		List<Review> reviews = new ArrayList<Review>();
-		reviews.add(new Review("5", "Great Hands-off stuff"));
-		reviews.add(new Review("3", "Accent is problem"));
-		
-		courserepo.addReviewsToCourse(10001L, reviews);
+		studentrepo.insertStudentAndCourses();
 	}
 
 }
